@@ -1,0 +1,85 @@
+classdef app2 < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure             matlab.ui.Figure
+        Text1EditFieldLabel  matlab.ui.control.Label
+        Text1EditField       matlab.ui.control.EditField
+        MoveButton           matlab.ui.control.Button
+        Text2EditFieldLabel  matlab.ui.control.Label
+        Text2EditField       matlab.ui.control.EditField
+    end
+
+    methods (Access = private)
+
+        % Button pushed function: MoveButton
+        function MoveButtonPushed(app, event)
+            a = app.Text1EditField.Value;
+            app.Text2EditField.Value=a ;
+            app.Text1EditField.Value="";
+        end
+    end
+
+    % App initialization and construction
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure
+            app.UIFigure = uifigure;
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'UI Figure';
+
+            % Create Text1EditFieldLabel
+            app.Text1EditFieldLabel = uilabel(app.UIFigure);
+            app.Text1EditFieldLabel.HorizontalAlignment = 'right';
+            app.Text1EditFieldLabel.Position = [52 412 34 22];
+            app.Text1EditFieldLabel.Text = 'Text1';
+
+            % Create Text1EditField
+            app.Text1EditField = uieditfield(app.UIFigure, 'text');
+            app.Text1EditField.Position = [101 412 100 22];
+
+            % Create MoveButton
+            app.MoveButton = uibutton(app.UIFigure, 'push');
+            app.MoveButton.ButtonPushedFcn = createCallbackFcn(app, @MoveButtonPushed, true);
+            app.MoveButton.Position = [239 412 100 22];
+            app.MoveButton.Text = 'Move';
+
+            % Create Text2EditFieldLabel
+            app.Text2EditFieldLabel = uilabel(app.UIFigure);
+            app.Text2EditFieldLabel.HorizontalAlignment = 'right';
+            app.Text2EditFieldLabel.Position = [403 412 34 22];
+            app.Text2EditFieldLabel.Text = 'Text2';
+
+            % Create Text2EditField
+            app.Text2EditField = uieditfield(app.UIFigure, 'text');
+            app.Text2EditField.Position = [452 412 100 22];
+        end
+    end
+
+    methods (Access = public)
+
+        % Construct app
+        function app = app2
+
+            % Create and configure components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
